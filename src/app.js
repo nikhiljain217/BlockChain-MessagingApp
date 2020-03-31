@@ -64,6 +64,7 @@ App = {
   	App.setLoading(true)
 
   	$('#account').html(App.account)
+    App.renderContacts()
   	App.renderMessages()
 
   	App.setLoading(false)
@@ -87,9 +88,9 @@ App = {
 
   renderMessages: async () =>{
   	const messageCount = await App.message.messageCount()
-  	const $tasktemplate = await $('.taskTemplate')
+  	const $messageTemplate = await $('.sent')
 
-  	
+  	$('#messageList').empty()
 
   	for(var i = 1;i <= messageCount;i++)
   	{
@@ -97,22 +98,52 @@ App = {
   		const messageId = message[0].toNumber
   		const sender = message[1]
   		const content = message[2]
-  		const sendTime = message[3]
-  		const $newTaskCompleted = $tasktemplate.clone()
-  		$newTaskCompleted.find('.content').html(content)
-  		$newTaskCompleted.find('.sender').html(sender)
-  		$newTaskCompleted.find('.sendtime').html(sendTime)
-  		$('#taskList').append($newTaskCompleted)
-  		$newTaskCompleted.show()
+  		const $newMessageTemplate = $messageTemplate.clone()
+  		
+  		$newMessageTemplate.find('div.sender').html(sender)
+      $newMessageTemplate.find('p.content').html(content)
+  		$('#messageList').append($newMessageTemplate)
+  		$newMessageTemplate.show()
   	}
 
 	},
 
+  renderContacts: async () =>{
+    const contactCount = await App.message.participantCount()
+    const $contactTemplate = await $('.contact')
+    $('#contactList').empty()
+    for(var i = 1;i <= contactCount;i++)
+    {
+      const participant = await App.message.participants(i);
+      const contactID = participant[0].toNumber
+      const contact = participant[1]
+      const $newContactTemplate = $contactTemplate.clone()
+      $newContactTemplate.find('p.name').html(contact)
+
+      $('#contactList').append($newContactTemplate)
+      $newContactTemplate.show()
+    }
+  },
 	addMessages: async () =>{
 		App.setLoading(true)
 		const content = $('#newMessage').val()
-		await App.message.addMessage(content)
+		const user = $.cookie("user");
+    alert(user)
+		await App.message.addMessage(content,user)
 		window.location.reload()
+	},
+
+
+  
+
+	setCookie: async() =>{
+		
+		const userName = $('#userName').val()
+		$.cookie('user',userName)
+    console.log($.cookie("user"))
+    await App.message.addParticipant(userName)  
+		window.location.replace("http://127.0.0.1:3000/index3.html")
+
 	}
   	
 }

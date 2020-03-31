@@ -57,23 +57,10 @@
             <p class="text-center">Loading...</p>
           </div>
           <div id="content">
-            <form onSubmit="App.addMessages(); return false;">
-              <input id="newMessage" type="text" class="form-control" placeholder="new message..." required>
+            <form id="userform" onSubmit="App.setCookie(); return false;">
+              <input id="userName" type="text" class="form-control" placeholder="userName" required>
               <input type="submit" hidden="">
             </form>
-            
-             <ul id="taskList" class="list-unstyled">
-              <div class="taskTemplate"  style="display: none">
-                <label>
-                  <span class="sender">Sender goes here...</span>
-                  <span class="content">Task content goes here...</span>
-                  <span class="sendtime">Time here</span>
-                  
-                </label>
-              </div>
-            </ul>
-            <ul id="completedTaskList" class="list-unstyled">
-            </ul>
           </div>
         </main>
       </div>
@@ -84,6 +71,7 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="vendor/truffle-contract/dist/truffle-contract.js"></script>
+    <script src="jquery.cookie.js"></script>
     <script src="app.js"></script>
   </body>
 </html>
